@@ -8,9 +8,11 @@ app.use(cors());
 
 const authRouter = require("./routes/auth");
 const eventRouter = require("./routes/event");
+const attendeesRouter = require("./routes/attendees");
 
 app.use("/", authRouter);
 app.use("/", eventRouter);
+app.use("/", attendeesRouter);
 
 const PORT = process.env.PORT | 3000;
 

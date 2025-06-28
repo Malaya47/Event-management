@@ -50,7 +50,34 @@ const validateLoginData = (req) => {
   }
 };
 
+const validateAttendeeData = (req) => {
+  const allowedFields = ["userRegistered", "eventRegisteredFor"];
+
+  const isAllowed = Object.keys(req.body).every((key) =>
+    allowedFields.includes(key)
+  );
+
+  if (!isAllowed) {
+    throw new Error("Invalid fields");
+  }
+
+  const { userRegistered, eventRegisteredFor } = req.body;
+
+  if (!userRegistered || !eventRegisteredFor) {
+    throw new Error("userRegistered and eventRegisteredFor are required");
+  }
+
+  if (
+    !validator.isMongoId(userRegistered) ||
+    !validator.isMongoId(eventRegisteredFor)
+  ) {
+    throw new Error("Invalid userRegistered or eventRegisteredFor");
+  }
+};
+
 module.exports = {
   validateSignupData,
   validateLoginData,
+  validateAttendeeData,
 };
+
