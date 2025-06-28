@@ -3,17 +3,13 @@ const User = require("../models/user");
 
 const userAuth = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
       throw new Error("Token is not provided");
     }
 
     const decodedToken = jwt.verify(token, "your_jwt_secret");
-
-    if (!decodedToken) {
-      throw new Error("Invalid token");
-    }
 
     const { _id } = decodedToken;
 
