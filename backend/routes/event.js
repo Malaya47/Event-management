@@ -3,6 +3,7 @@ const eventRouter = express.Router();
 const Event = require("../models/event");
 const userAuth = require("../middlewares/auth");
 
+// create event
 eventRouter.post("/event/create", userAuth, async (req, res) => {
   try {
     const allowedFields = ["title", "description", "location", "date"];
@@ -33,6 +34,58 @@ eventRouter.post("/event/create", userAuth, async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "An error occured while creating event",
+      error: error.message,
+    });
+  }
+});
+
+// get all events of loggedInUser to manage
+eventRouter.get("/event/manageEvents", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    const events = await Event.find({ createdBy: loggedInUser._id });
+
+    if (!events) {
+      throw new Error("Events not found");
+    }
+
+    if (events.length === 0) {
+      throw new Error("No events found");
+    }
+
+    res.status(200).json({
+      message: "Events fetched successfully",
+      events,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occured while fetching events",
+      error: error.message,
+    });
+  }
+});
+
+// get all events except loggedInUser events
+eventRouter.get("/event/events", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    const events = await Event.find({ createdBy: { $ne: loggedInUser._id } });
+
+    if (!events) {
+      throw new Error("Events not found");
+    }
+
+    if (events.length === 0) {
+      throw new Error("No events found");
+    }
+
+    res.status(200).json({
+      message: "Events fetched successfully",
+      events,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occured while fetching events",
       error: error.message,
     });
   }
