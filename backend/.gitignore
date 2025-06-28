@@ -1,0 +1,22 @@
+# Node.js dependencies
+/node_modules
+
+# Environment variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS and editor-specific files
+.DS_Store
+Thumbs.db
+*.swp
+
+# Optional: build output or coverage reports
+dist
+coverage
+
+# Optional: local environment settings
+.vscode
