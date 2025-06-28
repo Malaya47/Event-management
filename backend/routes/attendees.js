@@ -3,9 +3,11 @@ const attendeesRouter = express.Router();
 
 const Registration = require("../models/registration");
 const User = require("../models/user");
+const Event = require("../models/event");
 const userAuth = require("../middlewares/auth");
 const { validateAttendeeData } = require("../utils/validations");
 
+// register for an event
 attendeesRouter.post("/attendees/register", userAuth, async (req, res) => {
   try {
     // sanitize and validate data received
@@ -20,8 +22,9 @@ attendeesRouter.post("/attendees/register", userAuth, async (req, res) => {
     }
 
     // First it should check that loggedInUser should not attend the event that he has created by himself
-    if (userRegistered.toString() === loggedInUser._id.toString()) {
-      throw new Error("You cannot register for your own event");
+    const event = await Event.findById(eventRegisteredFor.toString());
+    if (event.createdBy.toString() === loggedInUser._id.toString()) {
+      throw new Error("You cannot regester in your own event");
     }
 
     // I will check if the loggedInUser has already registered for the event or not if he has registered for the event then he cannot register again
@@ -51,5 +54,44 @@ attendeesRouter.post("/attendees/register", userAuth, async (req, res) => {
     });
   }
 });
+
+// get all registered attendes for a particular event
+attendeesRouter.get(
+  "/attendees/:eventId/registered",
+  userAuth,
+  async (req, res) => {
+    try {
+      const loggedInUser = req.user;
+      //  for particular event get all registered attendes
+      const { eventId } = req.params;
+
+      const event = await Event.findById(eventId);
+
+      if (!event) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+
+      if (event.createdBy.toString() !== loggedInUser._id.toString()) {
+        return res
+          .status(403)
+          .json({ message: "You are not allowed to access this event" });
+      }
+
+      const registeredAttendees = await Registration.find({
+        eventRegisteredFor: eventId,
+      });
+
+      res.status(200).json({
+        message: "Attendees fetched successfully",
+        registeredAttendees,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "An error occured while fetching attendees",
+        error: error.message,
+      });
+    }
+  }
+);
 
 module.exports = attendeesRouter;
