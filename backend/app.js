@@ -1,16 +1,24 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const connectDB = require("./config/database");
 
 app.use(express.json());
 app.use(cors());
 
-const port = process.env.PORT | 3000;
+const authRouter = require("./routes/auth");
 
-app.get("/", (req, res) => {
-  res.send("hello");
-});
+app.use("/", authRouter);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+const PORT = process.env.PORT | 3000;
+
+connectDB()
+  .then(() => {
+    console.log("Database connected successfully");
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.log("Database connection failed", error);
+  });

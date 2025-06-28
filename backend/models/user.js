@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minLength: 7,
-      maxLength: 20,
+      maxLength: 100,
       validate(value) {
         if (!validator.isStrongPassword(value)) {
           throw new Error(
@@ -42,4 +42,4 @@ const userSchema = new mongoose.Schema(
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = user;
+module.exports = User;
