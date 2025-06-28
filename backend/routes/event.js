@@ -18,6 +18,14 @@ eventRouter.post("/event/create", userAuth, async (req, res) => {
     const loggedInUser = req.user;
     const { title, description, location, date } = req.body;
 
+    // I want to keep a check that either i can make the date of event in future or at today data not in the past date
+
+    if (new Date(date) < new Date()) {
+      throw new Error(
+        "Date cannot be in the past you can select future date only or at present date"
+      );
+    }
+
     const event = new Event({
       title: title,
       description: description,
