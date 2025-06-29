@@ -77,7 +77,9 @@ eventRouter.get("/event/manageEvents", userAuth, async (req, res) => {
 eventRouter.get("/event/events", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
-    const events = await Event.find({ createdBy: { $ne: loggedInUser._id } });
+    const events = await Event.find({
+      createdBy: { $ne: loggedInUser._id },
+    }).populate("createdBy", ["name"]);
 
     if (!events) {
       throw new Error("Events not found");
