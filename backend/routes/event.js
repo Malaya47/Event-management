@@ -1,7 +1,9 @@
 const express = require("express");
 const eventRouter = express.Router();
 const Event = require("../models/event");
+const Registration = require("../models/registration");
 const userAuth = require("../middlewares/auth");
+const validator = require("validator");
 
 // create event
 eventRouter.post("/event/create", userAuth, async (req, res) => {
@@ -42,6 +44,90 @@ eventRouter.post("/event/create", userAuth, async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "An error occured while creating event",
+      error: error.message,
+    });
+  }
+});
+
+// event edit
+eventRouter.patch("/event/edit/:eventId", userAuth, async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const loggedInUser = req.user;
+    const { title, description, location, date } = req.body;
+    const allowedFields = ["title", "description", "location", "date"];
+    const isAllowed = Object.keys(req.body).every((key) =>
+      allowedFields.includes(key)
+    );
+
+    if (!isAllowed) {
+      throw new Error("Invalid fields");
+    }
+    // I should also check that the eventId is valid or not
+    if (!validator.isMongoId(eventId)) {
+      throw new Error("Invalid eventId");
+    }
+
+    // I should also check that the event belongs to loggedInUser or not
+    const event = await Event.findOne({
+      _id: eventId,
+      createdBy: loggedInUser._id,
+    });
+
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    // Now update the event
+    Object.keys(req.body).forEach((key) => (event[key] = req.body[key]));
+
+    const updatedEvent = await event.save();
+    res.status(200).json({
+      message: "Event updated successfully",
+      event: updatedEvent,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occured while updating event",
+      error: error.message,
+    });
+  }
+});
+
+// delete event
+eventRouter.delete("/event/delete/:eventId", userAuth, async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const loggedInUser = req.user;
+    // I should also check that the eventId is valid or not
+    if (!validator.isMongoId(eventId)) {
+      throw new Error("Invalid eventId");
+    }
+
+    // I should also check that the event belongs to loggedInUser or not
+    const event = await Event.findOne({
+      _id: eventId,
+      createdBy: loggedInUser._id,
+    });
+
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    // Now delete the event and should also delete the attendees to this event registered for this event
+
+    await Event.deleteOne({ _id: eventId });
+
+    await Registration.deleteMany({
+      eventRegisteredFor: eventId,
+    });
+
+    res.status(200).json({
+      message: "Event deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occured while deleting event",
       error: error.message,
     });
   }
