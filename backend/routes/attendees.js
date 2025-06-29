@@ -79,7 +79,7 @@ attendeesRouter.get(
 
       const registeredAttendees = await Registration.find({
         eventRegisteredFor: eventId,
-      });
+      }).populate("userRegistered", ["name", "email"]);
 
       res.status(200).json({
         message: "Attendees fetched successfully",
