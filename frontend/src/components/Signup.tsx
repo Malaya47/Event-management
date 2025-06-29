@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import API from "../api";
 
 export default function Signup() {
@@ -57,6 +57,9 @@ export default function Signup() {
             <button className="btn btn-primary" onClick={handleSignup}>
               Signup
             </button>
+            <Link to="/" className="btn btn-ghost ml-2">
+              Already have an account ?
+            </Link>
           </div>
         </div>
       </div>
