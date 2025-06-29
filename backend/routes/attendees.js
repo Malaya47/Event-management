@@ -94,4 +94,24 @@ attendeesRouter.get(
   }
 );
 
+// get all registrations by logged in user
+attendeesRouter.get("/user/registrations", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    const registrations = await Registration.find({
+      userRegistered: loggedInUser._id,
+    });
+
+    res.status(200).json({
+      message: "Registrations fetched successfully",
+      registrations,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occured while fetching registrations",
+      error: error.message,
+    });
+  }
+});
+
 module.exports = attendeesRouter;
