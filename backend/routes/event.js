@@ -143,10 +143,6 @@ eventRouter.get("/event/manageEvents", userAuth, async (req, res) => {
       throw new Error("Events not found");
     }
 
-    if (events.length === 0) {
-      throw new Error("No events found");
-    }
-
     res.status(200).json({
       message: "Events fetched successfully",
       events,
