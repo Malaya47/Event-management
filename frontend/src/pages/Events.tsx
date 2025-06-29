@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import API from "../api";
 import { jwtDecode } from "jwt-decode";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
-  const [registeredEventIds, setRegisteredEventIds] = useState([]);
+  const [registeredEventIds, setRegisteredEventIds] = useState<string[]>([]);
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      const decoded = jwtDecode(token);
+      const decoded: any = jwtDecode(token);
       setUserId(decoded._id);
     }
 
     // Fetch public events
     API.get("/event/events")
-      .then((res) => {
+      .then((res: any) => {
         setEvents(res.data.events);
       })
       .catch(() => alert("Error fetching events"));
 
     // Fetch all registrations by logged-in user
     API.get("/user/registrations") // You’ll need to create this endpoint
-      .then((res) => {
+      .then((res: any) => {
         const registeredEventIds = res.data.registrations.map(
-          (r) => r.eventRegisteredFor
+          (r: any) => r.eventRegisteredFor
         );
         setRegisteredEventIds(registeredEventIds);
       })
@@ -41,7 +41,7 @@ const Events = () => {
       const res = await API.post("/attendees/register", payload);
       alert(res.data.message);
       setRegisteredEventIds([...registeredEventIds, eventId]); // update UI
-    } catch (error) {
+    } catch (error: any) {
       alert(error.response?.data?.error || "Registration failed");
     }
   };
@@ -50,7 +50,7 @@ const Events = () => {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Available Events</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {events.map((event) => (
+        {events.map((event: any) => (
           <div key={event._id} className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h2 className="card-title">{event.title}</h2>

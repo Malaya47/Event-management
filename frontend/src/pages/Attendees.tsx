@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from "../api";
 
@@ -9,10 +9,10 @@ const Attendees = () => {
 
   useEffect(() => {
     API.get(`/attendees/${eventId}/registered`)
-      .then((res) => {
+      .then((res: any) => {
         setAttendees(res.data.registeredAttendees);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         setError(err.response?.data?.message || "Failed to fetch attendees");
       });
   }, [eventId]);
@@ -37,7 +37,7 @@ const Attendees = () => {
 
       {!error && attendees.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {attendees.map((attendee, index) => (
+          {attendees.map((attendee: any, index) => (
             <div
               key={attendee._id || index}
               className="card bg-base-100 shadow-xl border"

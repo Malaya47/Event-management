@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import API from "../api";
-import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
 
 const ManageEvents = () => {
@@ -15,15 +14,15 @@ const ManageEvents = () => {
 
   const fetchEvents = () => {
     API.get("/event/manageEvents")
-      .then((res) => setEvents(res.data.events))
-      .catch((err) => console.log("Fetch failed", err));
+      .then((res: any) => setEvents(res.data.events))
+      .catch((err: any) => console.log("Fetch failed", err));
   };
 
   useEffect(() => {
     fetchEvents();
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -32,7 +31,7 @@ const ManageEvents = () => {
     setEditingId(null);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
       if (editingId) {
@@ -42,12 +41,12 @@ const ManageEvents = () => {
       }
       resetForm();
       fetchEvents();
-    } catch (error) {
+    } catch (error: any) {
       alert(error.response?.data?.error || "Error saving event");
     }
   };
 
-  const handleEdit = (event) => {
+  const handleEdit = (event: any) => {
     setEditingId(event._id);
     setFormData({
       title: event.title,
@@ -58,7 +57,7 @@ const ManageEvents = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: any) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
     try {
       await API.delete(`/event/delete/${id}`);
@@ -123,7 +122,7 @@ const ManageEvents = () => {
       <h3 className="text-xl font-semibold mt-8 mb-4">My Events</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {events?.length === 0 && <p>No events found</p>}
-        {events.map((event) => (
+        {events.map((event: any) => (
           <div key={event._id} className="card bg-base-100 shadow-md">
             <div className="card-body">
               <h2 className="card-title">{event.title}</h2>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
 
@@ -10,7 +10,7 @@ export default function Signup() {
   });
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -19,7 +19,7 @@ export default function Signup() {
       const res = await API.post("/signup", form);
       alert(res.data.message);
       navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       alert(error.response.data.message || "Signup failed");
     }
   };

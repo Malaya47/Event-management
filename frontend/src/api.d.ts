@@ -1,7 +1,10 @@
-declare const API: {
-  post: (url: string, data?: any, config?: any) => Promise<any>;
-  get: (url: string, config?: any) => Promise<any>;
-  // Add other methods as needed (put, delete, etc.)
+const API = {
+  post: (url: string, data?: any, config?: any) =>
+    axios.post(url, data, config),
+  get: (url: string, config?: any) => axios.get(url, config),
+  patch: (url: string, data?: any, config?: any) =>
+    axios.patch(url, data, config),
+  delete: (url: string, config?: any) => axios.delete(url, config),
 };
 
 export default API;

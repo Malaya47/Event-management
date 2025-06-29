@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import API from "../api";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -14,7 +14,7 @@ const Login = () => {
 
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard/events");
-    } catch (err) {
+    } catch (err: any) {
       alert("Login failed: " + err.response.data.message);
     }
   };
