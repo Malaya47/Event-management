@@ -1,6 +1,10 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
+require("dotenv").config();
+
+const JWT_SECRET = process.env.JWT_SECRET;
+
 const userAuth = async (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
@@ -9,7 +13,7 @@ const userAuth = async (req, res, next) => {
       throw new Error("Token is not provided");
     }
 
-    const decodedToken = jwt.verify(token, "your_jwt_secret");
+    const decodedToken = jwt.verify(token, JWT_SECRET);
 
     const { _id } = decodedToken;
 
