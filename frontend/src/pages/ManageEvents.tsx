@@ -132,7 +132,12 @@ const ManageEvents = () => {
                 📍 {event.location} | 📅{" "}
                 {new Date(event.date).toLocaleDateString()}
               </p>
-              <Link className="text-blue-700">Click here to see attendees</Link>
+              <Link
+                to={`/dashboard/attendees/${event._id}`}
+                className="text-blue-700"
+              >
+                Click here to see attendees
+              </Link>
               <div className="card-actions justify-end">
                 <button
                   className="btn btn-sm btn-outline"

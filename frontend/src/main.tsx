@@ -8,6 +8,7 @@ import ProtectedLayout from "./components/ProtectedLayout.tsx";
 import Signup from "./components/Signup.tsx";
 import Events from "./pages/Events.tsx";
 import ManageEvents from "./pages/ManageEvents.tsx";
+import Attendees from "./pages/Attendees.tsx";
 
 const router = createBrowserRouter([
   // Authentication routes (no navbar)
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "manageEvents",
         element: <ManageEvents />, // Replace with actual component
+      },
+      {
+        path: "attendees/:eventId",
+        element: <Attendees />,
       },
       // Add all your protected routes here
     ],
