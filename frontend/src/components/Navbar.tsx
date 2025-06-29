@@ -6,10 +6,12 @@ const Navbar = () => {
     <nav className="">
       <div className="navbar bg-base-100 shadow-sm">
         <div className="flex-1">
-          <a className="btn btn-ghost text-xl">Event Management</a>
+          <Link to={"/dashboard/events"} className="btn btn-ghost text-xl">
+            Event Management
+          </Link>
         </div>
         <div className="flex gap-2">
-          <Link className="self-center" to="#">
+          <Link className="self-center" to="/dashboard/manageEvents">
             Manage Your Events
           </Link>
           <div className="dropdown dropdown-end">

@@ -7,6 +7,7 @@ import AuthLayout from "./components/AuthLayout.tsx";
 import ProtectedLayout from "./components/ProtectedLayout.tsx";
 import Signup from "./components/Signup.tsx";
 import Events from "./pages/Events.tsx";
+import ManageEvents from "./pages/ManageEvents.tsx";
 
 const router = createBrowserRouter([
   // Authentication routes (no navbar)
@@ -34,8 +35,8 @@ const router = createBrowserRouter([
         element: <Events />, // Replace with actual component
       },
       {
-        path: "settings",
-        element: <div>Settings Page</div>, // Replace with actual component
+        path: "manageEvents",
+        element: <ManageEvents />, // Replace with actual component
       },
       // Add all your protected routes here
     ],
